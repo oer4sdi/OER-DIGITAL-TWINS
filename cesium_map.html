@@ -8,27 +8,35 @@
 </head>
 <body>
   <div id="cesiumContainer"></div>
+
+  <!-- Load the config.js file first -->
+  <script src="config.js"></script>
+
   <script type="module">
 
     // Access Token
-    Cesium.Ion.defaultAccessToken = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJqdGkiOiIwMjgxMTVkNi0xNTFkLTRjNzAtYmNkNC05Zjc1N2JhZDFjMzIiLCJpZCI6MjE5MDk1LCJpYXQiOjE3MzgwMDg3NDl9.bobzukv0ZJ30rWMsYmQQKhew4GedZotnWar4R6GX1GE';
+    Cesium.Ion.defaultAccessToken = CESIUM_ION_ACCESS_TOKEN;
 
     // Initialize the Cesium Viewer in the HTML element with the `cesiumContainer` ID.
     const viewer = new Cesium.Viewer('cesiumContainer', {
-      terrain: Cesium.Terrain.fromWorldTerrain(),
-    });    
+        globe: false,
+        // skyAtmosphere: new Cesium.skyAtmosphere(),
+        sceneModePicker: false,
+        baseLayerPicker: false,
+        // geocoder: Cesium.IonGeocodeProviderType.GOOGLE,
+    });
 
-    // Add Cesium OSM Buildings, a global 3D buildings layer.
-    // const buildingTileset = await Cesium.createOsmBuildingsAsync();
-    // viewer.scene.primitives.add(buildingTileset);
+    // Add Google Photorealistic 3D Tiles
+    try {
+        const tileset = await Cesium.Cesium3DTileset.fromIonAssetId(2275207);
+        viewer.scene.primitives.add(tileset)
+    } catch (error) {
+        console.log(error)
+    }
 
-    // Add the Melbourne Photogrammetry dataset
-    const tileset = viewer.scene.primitives.add(
-        await Cesium.Cesium3DTileset.fromIonAssetId(69380),
-    );
-
-
-    viewer.zoomTo(tileset);
+    // const reichstag_tileset = viewer.scene.primitives.add(
+    //   await Cesium.Cesium3DTileset.fromIonAssetId(3106572),
+    // );
 
   </script>
  </div>

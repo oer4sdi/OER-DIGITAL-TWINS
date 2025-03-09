@@ -67,9 +67,48 @@ airQualityWidget.appendChild(pm25Element);
 airQualityWidget.appendChild(so2Element);
 
 // --- Air Quality Data Handling ---
+let sensorMarker;
+
+// Helper Function to determine color based on AQI
+const getColorFromAQI = (aqi) => {
+    if (aqi <= 50) {
+        return Cesium.Color.GREEN;
+    } else if (aqi <= 100) {
+        return Cesium.Color.YELLOW;
+    } else if (aqi <= 150) {
+        return Cesium.Color.ORANGE;
+    } else if (aqi <= 200) {
+        return Cesium.Color.RED;
+    } else if (aqi <= 300) {
+        return Cesium.Color.PURPLE;
+    } else {
+        return Cesium.Color.MAROON;
+    }
+};
+
+// Helper Function to determine size based on AQI
+const getSizeFromAQI = (aqi) => {
+    if (aqi <= 50) {
+        return 5;
+    } else if (aqi <= 100) {
+        return 7.5;
+    } else if (aqi <= 150) {
+        return 10;
+    } else if (aqi <= 200) {
+        return 12.5;
+    } else if (aqi <= 300) {
+        return 15;
+    } else {
+        return 20;
+    }
+};
+
 const updateAirQualityWidget = (data) => {
     if (data.status === 'ok' && data.data) {
         const { aqi, iaqi, city, time } = data.data;
+        const [ lat, lon ] = city.geo;
+        const color = getColorFromAQI(aqi);
+        const size = getSizeFromAQI(aqi);
 
         aqiElement.textContent = `AQI: ${aqi}`;
         
@@ -96,6 +135,34 @@ const updateAirQualityWidget = (data) => {
             pm25Element.textContent = 'PM2.5: N/A';
             so2Element.textContent = 'SO2: N/A';
         }
+
+        //Add or update the marker
+        if (sensorMarker) {
+            viewer.entities.remove(sensorMarker);
+        }
+
+        sensorMarker = viewer.entities.add({
+            position: Cesium.Cartesian3.fromDegrees(lon, lat,50),
+            point: {
+                pixelSize: 20,
+                color: color,
+                outlineColor: Cesium.Color.BLACK,
+                outlineWidth: 2,
+            },
+            label: {
+                text: `Air Quality Sensor`,
+                font: '14px sans-serif',
+                heightReference: Cesium.HeightReference.CLAMP_TO_GROUND,
+                horizontalOrigin: Cesium.HorizontalOrigin.LEFT,
+                verticalOrigin: Cesium.VerticalOrigin.BASELINE,
+                fillColor: Cesium.Color.GHOSTWHITE,
+                showBackground: true,
+                backgroundColor: Cesium.Color.DARKSLATEGREY.withAlpha(0.8),
+                backgroundPadding: new Cesium.Cartesian2(8, 4),
+                pixelOffset: new Cesium.Cartesian2(15, 6),
+                disableDepthTestDistance: Number.POSITIVE_INFINITY,
+            }
+        });
     } else {
         stationName.textContent = 'Station: N/A';
         measurementTime.textContent = 'Measurement Time: N/A';

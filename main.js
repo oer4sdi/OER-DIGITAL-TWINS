@@ -45,6 +45,8 @@ airQualityWidget.style.zIndex = '999';
 document.body.appendChild(airQualityWidget);
 
 // Create individual elements for the air quality parameters
+const stationName = document.createElement('div');
+const measurementTime = document.createElement('div');
 const aqiElement = document.createElement('div');
 const coElement = document.createElement('div');
 const no2Element = document.createElement('div');
@@ -54,6 +56,8 @@ const pm25Element = document.createElement('div');
 const so2Element = document.createElement('div');
 
 // Add elements to the widget
+airQualityWidget.appendChild(stationName);
+airQualityWidget.appendChild(measurementTime);
 airQualityWidget.appendChild(aqiElement);
 airQualityWidget.appendChild(coElement);
 airQualityWidget.appendChild(no2Element);
@@ -65,13 +69,16 @@ airQualityWidget.appendChild(so2Element);
 // --- Air Quality Data Handling ---
 const updateAirQualityWidget = (data) => {
     if (data.status === 'ok' && data.data) {
-        const { aqi, iaqi } = data.data;
+        const { aqi, iaqi, city, time } = data.data;
 
         aqiElement.textContent = `AQI: ${aqi}`;
         
+        stationName.textContent = `Station: ${city.name}`;
+        measurementTime.textContent = `Measurement Time: ${time.s}`;
+
         //Check if the data.aqi is a number and not "-"
         if (typeof aqi !== "number"){
-          aqiElement.textContent = `AQI: Data not availiable`;
+          aqiElement.textContent = `AQI: Data not available`;
         }
 
         if (iaqi) {
@@ -90,6 +97,8 @@ const updateAirQualityWidget = (data) => {
             so2Element.textContent = 'SO2: N/A';
         }
     } else {
+        stationName.textContent = 'Station: N/A';
+        measurementTime.textContent = 'Measurement Time: N/A';
         aqiElement.textContent = 'AQI: N/A';
         coElement.textContent = 'CO: N/A';
         no2Element.textContent = 'NO2: N/A';

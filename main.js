@@ -3,6 +3,14 @@ import { CESIUM_ION_ACCESS_TOKEN, AIR_QUALITY_OPEN_DATA_PLATFORM_TOKEN } from '.
 // Access Token
 Cesium.Ion.defaultAccessToken = CESIUM_ION_ACCESS_TOKEN;
 
+// Default Coordinates for initial air quality data fetch
+let DEFAULT_LATITUDE = 53.5542627;
+let DEFAULT_LONGITUDE = 9.9949553;
+
+// Variable to store the current coordinates for air quality data fetching
+let currentLat = DEFAULT_LATITUDE;
+let currentLon = DEFAULT_LONGITUDE;
+
 // Initialize the Cesium Viewer in the HTML element with the `cesiumContainer` ID.
 const viewer = new Cesium.Viewer('cesiumContainer', {
     sceneModePicker: false,
@@ -13,7 +21,7 @@ viewer.scene.globe.show = false;
 
 // Set the camera to focus on Hamburg
 viewer.camera.flyTo({
-    destination: Cesium.Cartesian3.fromDegrees(9.9949553, 53.5542627, 500),
+    destination: Cesium.Cartesian3.fromDegrees(DEFAULT_LONGITUDE, DEFAULT_LATITUDE, 500),
     orientation: {
         heading: Cesium.Math.toRadians(0.0),
         pitch: Cesium.Math.toRadians(-30.0),
@@ -65,6 +73,26 @@ airQualityWidget.appendChild(o3Element);
 airQualityWidget.appendChild(pm10Element);
 airQualityWidget.appendChild(pm25Element);
 airQualityWidget.appendChild(so2Element);
+
+// get the coordinates of mouse click position
+const handler = new Cesium.ScreenSpaceEventHandler(viewer.scene.canvas);
+handler.setInputAction((movement) => {
+    const pickedPosition = viewer.scene.pickPosition(movement.position);
+    
+    if (Cesium.defined(pickedPosition)) {
+        const cartographic = Cesium.Cartographic.fromCartesian(pickedPosition);
+        if (Cesium.defined(cartographic)) {
+            const lat = Cesium.Math.toDegrees(cartographic.latitude);
+            const lon = Cesium.Math.toDegrees(cartographic.longitude);
+
+            // update current coordinates
+            currentLat = lat;
+            currentLon = lon;
+            
+            fetchAirQuality(lat, lon)
+        }
+    }
+}, Cesium.ScreenSpaceEventType.LEFT_CLICK)
 
 // --- Air Quality Data Handling ---
 let sensorMarker;
@@ -177,8 +205,8 @@ const updateAirQualityWidget = (data) => {
 };
 
 // Fetch Air Quality Data from API and update the widget
-const fetchAirQuality = async () => {
-    const url = `https://api.waqi.info/feed/geo:53.5458170;9.9746386/?token=${AIR_QUALITY_OPEN_DATA_PLATFORM_TOKEN}`;
+const fetchAirQuality = async (latitude, longitude) => {
+    const url = `https://api.waqi.info/feed/geo:${latitude};${longitude}/?token=${AIR_QUALITY_OPEN_DATA_PLATFORM_TOKEN}`;
     try {
         const response = await fetch(url);
         const data = await response.json();
@@ -192,5 +220,5 @@ const fetchAirQuality = async () => {
 };
 
 // Fetch data initially and then set up the interval
-fetchAirQuality();
-setInterval(fetchAirQuality, 5000);
+fetchAirQuality(currentLat, currentLon);
+setInterval(() => fetchAirQuality(currentLat, currentLon), 5000);

@@ -40,6 +40,14 @@ try {
 
 scene.globe.show = false;
 
+// OSM LOD2 buildings
+let osmBuildings;
+try {
+    osmBuildings = await Cesium.createOsmBuildingsAsync();
+} catch (error) {
+    console.log("Error loading OSM buildings:", error);
+}
+
 // Set the camera to focus on Hamburg
 viewer.camera.flyTo({
     destination: Cesium.Cartesian3.fromDegrees(DEFAULT_LONGITUDE, DEFAULT_LATITUDE, 500),
@@ -58,15 +66,23 @@ mapStyleSelect.addEventListener('change', () => {
     const selectedValue = mapStyleSelect.value;
 
     if (selectedValue === 'terrain') {
-        // Show Cesium World Terrain
+        // Show Cesium World Terrain and the OSM buildings
         scene.globe.show = true;
         scene.terrainProvider = worldTerrain;
         world3DTileset.show = false;
+
+        if (osmBuildings) {
+            scene.primitives.add(osmBuildings);
+        }
     } else if (selectedValue === '3dtiles') {
-        // Show Google 3D Tiles
+        // Show Google 3D Tiles and remove OSM buildings
         scene.globe.show = false;
         scene.terrainProvider = undefined;
         world3DTileset.show = true;
+
+        if (osmBuildings) {
+            scene.primitives.remove(osmBuildings);
+        }
     }
 });
 

@@ -88,6 +88,8 @@ handler.setInputAction((movement) => {
             // update current coordinates
             currentLat = lat;
             currentLon = lon;
+
+            console.log(lat, lon)
             
             fetchAirQuality(lat, lon)
         }
@@ -210,7 +212,7 @@ const fetchAirQuality = async (latitude, longitude) => {
     try {
         const response = await fetch(url);
         const data = await response.json();
-        console.log(data)
+        // console.log(data)
         updateAirQualityWidget(data);
     } catch (error) {
         console.log(error.message);
@@ -219,6 +221,29 @@ const fetchAirQuality = async (latitude, longitude) => {
     }
 };
 
+
+// Inserting a proposed building into the 3D Scene
+// Highlight the target area for development
+const targetHighlight = new Cesium.Entity({
+    polygon: {
+        hierarchy: Cesium.Cartesian3.fromDegreesArray(
+            [
+                [9.968901256397512, 53.56551794813478],
+                [9.969287519385556, 53.56556601391285],
+                [9.969705827131326, 53.565558689097514],
+                [9.969984964265247, 53.56546845874044],
+                [9.96979432612361, 53.564577549435015],
+                [9.968641828371895, 53.564839696184],
+                [9.968695537941766, 53.565328962353256]
+            ].flat(2),
+        ),
+        material: Cesium.Color.YELLOW.withAlpha(0.6),
+        classificationType: Cesium.ClassificationType.CESIUM_3D_TILE
+    },
+});
+viewer.entities.add(targetHighlight);
+
+
 // Fetch data initially and then set up the interval
 fetchAirQuality(currentLat, currentLon);
-setInterval(() => fetchAirQuality(currentLat, currentLon), 5000);
+setInterval(() => fetchAirQuality(currentLat, currentLon), 30000);

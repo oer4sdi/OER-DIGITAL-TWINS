@@ -219,15 +219,30 @@ const targetHighlight = new Cesium.Entity({
 });
 viewer.entities.add(targetHighlight);
 
-// Toggle Button Logic
-const toggleButton = document.getElementById('targetHighlightToggle');
-toggleButton.addEventListener('change', () => {
-    if (toggleButton.checked) {
+// Add tileset of proposed new building
+let buildingTileset;
+try {
+    buildingTileset = await Cesium.Cesium3DTileset.fromIonAssetId(3225663);
+    viewer.scene.primitives.add(buildingTileset);
+} catch (error) {
+    console.log(error);
+}
+
+// Toggle Button to show or hide highlighted area
+const highlightAreaToggleButton = document.getElementById('targetHighlightToggle');
+highlightAreaToggleButton.addEventListener('change', () => {
+    if (highlightAreaToggleButton.checked) {
         viewer.entities.add(targetHighlight);
     } else {
         viewer.entities.remove(targetHighlight);
     }
 });
+
+// Toggle button to show or hide proposed building
+const showBuildingToggleButton = document.getElementById('proposedBuildingToggle');
+showBuildingToggleButton.addEventListener('change', () => {
+    buildingTileset.show = showBuildingToggleButton.checked;
+})
 
 
 // Fetch data initially and then set up the interval

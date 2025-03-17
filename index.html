@@ -25,16 +25,59 @@
       border-radius: 5px;
       z-index: 999;
     }
-    #toggleContainer {
-      position: absolute;
-      top: 10px;
-      left: 10px;
+    .toggleContainer {
       z-index: 1000;
       color: white;
       background-color: rgba(0, 0, 0, 0.5);
       padding: 3px;
       border-radius: 5px;
       cursor: pointer;
+      display: flex;
+      align-items: center;
+      margin-bottom: 5px;
+      margin-right: 10px;
+    }
+    .toggleWrapper{
+      position: absolute;
+      top: 10px;
+      left: 10px;
+      display: flex;
+      flex-direction: row;
+    }
+    label{
+      cursor: pointer;
+      margin-left: 3px;
+    }
+    input[type="checkbox"] {
+      appearance: none;
+      -webkit-appearance: none;
+      -moz-appearance: none;
+      width: 16px;
+      height: 16px;
+      border: 2px solid white;
+      border-radius: 3px;
+      cursor: pointer;
+      outline: none;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    /* Style the checkmark */
+    input[type="checkbox"]::before {
+      content: '\2713';
+      font-size: 12px;
+      color: transparent;
+      transition: color 0.2s;
+    }
+    input[type="checkbox"]:checked::before {
+      color: white; 
+    }
+    input[type="checkbox"]:hover {
+      background-color: rgba(255, 255, 255, 0.2);
+    }
+    input[type="checkbox"]:checked {
+      background-color: rgba(0, 0, 0, 0.9);
     }
 </style>
 <body>
@@ -54,9 +97,16 @@
   </div>
 
   <!-- Toggle Button -->
-  <div id="toggleContainer">
-    <input type="checkbox" id="targetHighlightToggle" checked>
-    <label for="targetHighlightToggle">Show Target Highlight</label>
+  <div class="toggleWrapper">
+    <div id="highlightedAreaToggleContainer" class="toggleContainer">
+        <input type="checkbox" id="targetHighlightToggle" checked>
+        <label for="targetHighlightToggle">Show Target Area</label>
+    </div>
+
+    <div id="proposedBuildingToggleContainer" class="toggleContainer">
+        <input type="checkbox" id="proposedBuildingToggle" checked>
+        <label for="proposedBuildingToggle">Show proposed building</label>
+    </div>
   </div>
 
   <script type="module" src="main.js"></script>

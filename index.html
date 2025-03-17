@@ -6,8 +6,58 @@
   <script src="https://cesium.com/downloads/cesiumjs/releases/1.126/Build/Cesium/Cesium.js"></script>
   <link href="https://cesium.com/downloads/cesiumjs/releases/1.126/Build/Cesium/Widgets/widgets.css" rel="stylesheet">
 </head>
+<style>
+   #cesiumContainer {
+      width: 100%;
+      height: 100%;
+      margin: 0;
+      padding: 0;
+      overflow: hidden;
+    }
+
+    #airQualityWidget {
+      position: absolute;
+      top: 40px;
+      left: 10px;
+      background-color: rgba(0, 0, 0, 0.5);
+      color: white;
+      padding: 10px;
+      border-radius: 5px;
+      z-index: 999;
+    }
+    #toggleContainer {
+      position: absolute;
+      top: 10px;
+      left: 10px;
+      z-index: 1000;
+      color: white;
+      background-color: rgba(0, 0, 0, 0.5);
+      padding: 3px;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+</style>
 <body>
   <div id="cesiumContainer"></div>
+
+  <!-- Air Quality Widget -->
+  <div id="airQualityWidget">
+    <div id="stationName"></div>
+    <div id="measurementTime"></div>
+    <div id="aqiElement"></div>
+    <div id="coElement"></div>
+    <div id="no2Element"></div>
+    <div id="o3Element"></div>
+    <div id="pm10Element"></div>
+    <div id="pm25Element"></div>
+    <div id="so2Element"></div>
+  </div>
+
+  <!-- Toggle Button -->
+  <div id="toggleContainer">
+    <input type="checkbox" id="targetHighlightToggle" checked>
+    <label for="targetHighlightToggle">Show Target Highlight</label>
+  </div>
 
   <script type="module" src="main.js"></script>
 

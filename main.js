@@ -38,41 +38,19 @@ try {
     console.log(error);
 }
 
-// --- UI Widget Setup ---
-// Main Container for the air quality information widget
-const airQualityWidget = document.createElement('div');
-airQualityWidget.id = 'airQualityWidget';
-airQualityWidget.style.position = 'absolute';
-airQualityWidget.style.top = '10px';
-airQualityWidget.style.left = '10px';
-airQualityWidget.style.backgroundColor = 'rgba(0, 0, 0, 0.5)';
-airQualityWidget.style.color = 'white';
-airQualityWidget.style.padding = '10px';
-airQualityWidget.style.borderRadius = '5px';
-airQualityWidget.style.zIndex = '999';
-document.body.appendChild(airQualityWidget);
+// Air quality widget
+const airQualityWidget = document.getElementById('airQualityWidget');
 
-// Create individual elements for the air quality parameters
-const stationName = document.createElement('div');
-const measurementTime = document.createElement('div');
-const aqiElement = document.createElement('div');
-const coElement = document.createElement('div');
-const no2Element = document.createElement('div');
-const o3Element = document.createElement('div');
-const pm10Element = document.createElement('div');
-const pm25Element = document.createElement('div');
-const so2Element = document.createElement('div');
-
-// Add elements to the widget
-airQualityWidget.appendChild(stationName);
-airQualityWidget.appendChild(measurementTime);
-airQualityWidget.appendChild(aqiElement);
-airQualityWidget.appendChild(coElement);
-airQualityWidget.appendChild(no2Element);
-airQualityWidget.appendChild(o3Element);
-airQualityWidget.appendChild(pm10Element);
-airQualityWidget.appendChild(pm25Element);
-airQualityWidget.appendChild(so2Element);
+// Get individual elements for the air quality parameters
+const stationName = document.getElementById('stationName');
+const measurementTime = document.getElementById('measurementTime');
+const aqiElement = document.getElementById('aqiElement');
+const coElement = document.getElementById('coElement');
+const no2Element = document.getElementById('no2Element');
+const o3Element = document.getElementById('o3Element');
+const pm10Element = document.getElementById('pm10Element');
+const pm25Element = document.getElementById('pm25Element');
+const so2Element = document.getElementById('so2Element');
 
 // get the coordinates of mouse click position
 const handler = new Cesium.ScreenSpaceEventHandler(viewer.scene.canvas);
@@ -88,8 +66,6 @@ handler.setInputAction((movement) => {
             // update current coordinates
             currentLat = lat;
             currentLon = lon;
-
-            console.log(lat, lon)
             
             fetchAirQuality(lat, lon)
         }
@@ -242,6 +218,16 @@ const targetHighlight = new Cesium.Entity({
     },
 });
 viewer.entities.add(targetHighlight);
+
+// Toggle Button Logic
+const toggleButton = document.getElementById('targetHighlightToggle');
+toggleButton.addEventListener('change', () => {
+    if (toggleButton.checked) {
+        viewer.entities.add(targetHighlight);
+    } else {
+        viewer.entities.remove(targetHighlight);
+    }
+});
 
 
 // Fetch data initially and then set up the interval

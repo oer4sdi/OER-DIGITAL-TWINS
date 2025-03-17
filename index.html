@@ -17,7 +17,7 @@
 
     #airQualityWidget {
       position: absolute;
-      top: 40px;
+      top: 50px;
       left: 10px;
       background-color: rgba(0, 0, 0, 0.5);
       color: white;
@@ -79,6 +79,17 @@
     input[type="checkbox"]:checked {
       background-color: rgba(0, 0, 0, 0.9);
     }
+
+    .map-style-select {
+      background-color: rgba(0, 0, 0, 0.5);
+      color: white;
+      padding: 5px 10px;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      outline: none;
+      margin-right: 10px;
+    }
 </style>
 <body>
   <div id="cesiumContainer"></div>
@@ -96,8 +107,12 @@
     <div id="so2Element"></div>
   </div>
 
-  <!-- Toggle Button -->
+  <!-- Toggle Buttons -->
   <div class="toggleWrapper">
+    <select id="mapStyleSelect" class="map-style-select">
+      <option value="3dtiles" selected>3D Tiles</option>
+      <option value="terrain">Terrain</option>
+    </select>
     <div id="highlightedAreaToggleContainer" class="toggleContainer">
         <input type="checkbox" id="targetHighlightToggle" checked>
         <label for="targetHighlightToggle">Show Target Area</label>

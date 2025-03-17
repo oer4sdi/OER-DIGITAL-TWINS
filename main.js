@@ -17,7 +17,28 @@ const viewer = new Cesium.Viewer('cesiumContainer', {
     baseLayerPicker: false,
 });
 
-viewer.scene.globe.show = false;
+const scene = viewer.scene;
+
+//  Cesium World Terrain
+let worldTerrain;
+try {
+  worldTerrain = await Cesium.createWorldTerrainAsync();
+//   scene.terrainProvider = worldTerrain;
+//   scene.globe.show = false;
+} catch (error) {
+  console.log(`There was an error creating world terrain. ${error}`);
+}
+
+// Add Google Photorealistic 3D Tiles
+let world3DTileset;
+try {
+    world3DTileset = await Cesium.Cesium3DTileset.fromIonAssetId(2275207);
+    scene.primitives.add(world3DTileset);
+} catch (error) {
+    console.log(error);
+}
+
+scene.globe.show = false;
 
 // Set the camera to focus on Hamburg
 viewer.camera.flyTo({
@@ -30,13 +51,24 @@ viewer.camera.flyTo({
     duration: 2
 });
 
-// Add Google Photorealistic 3D Tiles
-try {
-    const tileset = await Cesium.Cesium3DTileset.fromIonAssetId(2275207);
-    viewer.scene.primitives.add(tileset);
-} catch (error) {
-    console.log(error);
-}
+// Toggle between Cesium global terrain and Google 3D Tileset
+const mapStyleSelect = document.getElementById('mapStyleSelect');
+
+mapStyleSelect.addEventListener('change', () => {
+    const selectedValue = mapStyleSelect.value;
+
+    if (selectedValue === 'terrain') {
+        // Show Cesium World Terrain
+        scene.globe.show = true;
+        scene.terrainProvider = worldTerrain;
+        world3DTileset.show = false;
+    } else if (selectedValue === '3dtiles') {
+        // Show Google 3D Tiles
+        scene.globe.show = false;
+        scene.terrainProvider = undefined;
+        world3DTileset.show = true;
+    }
+});
 
 // Air quality widget
 const airQualityWidget = document.getElementById('airQualityWidget');

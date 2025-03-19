@@ -114,6 +114,24 @@ function showByBuildingType(buildingType) {
     }
 }
 
+// Color the buildings based on their distance from the highlighted location
+function colorByDistanceToCoordinate(pickedLatitude, pickedLongitude) {
+    osmBuildings.style = new Cesium.Cesium3DTileStyle({
+      defines: {
+        distance: `distance(vec2(\${feature['cesium#longitude']}, \${feature['cesium#latitude']}), vec2(${pickedLongitude},${pickedLatitude}))`,
+      },
+      color: {
+        conditions: [
+          ["${distance} > 0.014", "color('blue')"],
+          ["${distance} > 0.010", "color('green')"],
+          ["${distance} > 0.006", "color('yellow')"],
+          ["${distance} > 0.0001", "color('red')"],
+          ["true", "color('white')"],
+        ],
+      },
+    });
+  }
+
 // Call the styling functions depending on the selected OSM buildings style
 const osmStyleSelect = document.getElementById('osmStyleSelect');
 osmStyleSelect.addEventListener('change', () => {
@@ -124,6 +142,8 @@ osmStyleSelect.addEventListener('change', () => {
         showByBuildingType("office");
     } else if (selectedValue === 'apartmentBuildings') {
         showByBuildingType("apartments");
+    } else if (selectedValue === 'distance') {
+        colorByDistanceToCoordinate(53.564869, 9.969486);
     }
 });
 
@@ -338,4 +358,4 @@ showBuildingToggleButton.addEventListener('change', () => {
 
 // Fetch data initially and then set up the interval
 fetchAirQuality(currentLat, currentLon);
-setInterval(() => fetchAirQuality(currentLat, currentLon), 30000);
+setInterval(() => fetchAirQuality(currentLat, currentLon), 300000);

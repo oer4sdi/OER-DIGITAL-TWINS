@@ -97,6 +97,23 @@ function highlightAllResidentialBuildings() {
     });
 }
 
+function showByBuildingType(buildingType) {
+    switch (buildingType) {
+      case "office":
+        osmBuildings.style = new Cesium.Cesium3DTileStyle({
+          show: "${feature['building']} === 'office'",
+        });
+        break;
+      case "apartments":
+        osmBuildings.style = new Cesium.Cesium3DTileStyle({
+          show: "${feature['building']} === 'apartments'",
+        });
+        break;
+      default:
+        break;
+    }
+}
+
 // Call the styling functions depending on the selected OSM buildings style
 const osmStyleSelect = document.getElementById('osmStyleSelect');
 osmStyleSelect.addEventListener('change', () => {
@@ -104,9 +121,9 @@ osmStyleSelect.addEventListener('change', () => {
     if (selectedValue === 'residential') {
         highlightAllResidentialBuildings()
     } else if (selectedValue === 'officeBuildings') {
-
-    } else if (selectedValue === 'distance') {
-
+        showByBuildingType("office");
+    } else if (selectedValue === 'apartmentBuildings') {
+        showByBuildingType("apartments");
     }
 });
 

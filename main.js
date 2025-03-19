@@ -82,7 +82,34 @@ mapStyleSelect.addEventListener('change', () => {
     }
 });
 
-// Style OSM Buildings based on Different Criteria
+// Functions to style OSM Buildings based on Different Criteria
+function highlightAllResidentialBuildings() {
+    osmBuildings.style = new Cesium.Cesium3DTileStyle({
+      color: {
+        conditions: [
+          [
+            "${feature['building']} === 'apartments' || ${feature['building']} === 'residential'",
+            "color('cyan', 0.9)",
+          ],
+          [true, "color('white')"],
+        ],
+      },
+    });
+}
+
+// Call the styling functions depending on the selected OSM buildings style
+const osmStyleSelect = document.getElementById('osmStyleSelect');
+osmStyleSelect.addEventListener('change', () => {
+    const selectedValue = osmStyleSelect.value;
+    if (selectedValue === 'residential') {
+        highlightAllResidentialBuildings()
+    } else if (selectedValue === 'officeBuildings') {
+
+    } else if (selectedValue === 'distance') {
+
+    }
+});
+
 
 
 // Air quality widget

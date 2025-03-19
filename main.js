@@ -23,8 +23,6 @@ const scene = viewer.scene;
 let worldTerrain;
 try {
   worldTerrain = await Cesium.createWorldTerrainAsync();
-//   scene.terrainProvider = worldTerrain;
-//   scene.globe.show = false;
 } catch (error) {
   console.log(`There was an error creating world terrain. ${error}`);
 }
@@ -44,6 +42,8 @@ scene.globe.show = false;
 let osmBuildings;
 try {
     osmBuildings = await Cesium.createOsmBuildingsAsync();
+    scene.primitives.add(osmBuildings);
+    osmBuildings.show = false;
 } catch (error) {
     console.log("Error loading OSM buildings:", error);
 }
@@ -70,21 +70,20 @@ mapStyleSelect.addEventListener('change', () => {
         scene.globe.show = true;
         scene.terrainProvider = worldTerrain;
         world3DTileset.show = false;
+        osmBuildings.show = true;
 
-        if (osmBuildings) {
-            scene.primitives.add(osmBuildings);
-        }
     } else if (selectedValue === '3dtiles') {
         // Show Google 3D Tiles and remove OSM buildings
         scene.globe.show = false;
         scene.terrainProvider = undefined;
         world3DTileset.show = true;
+        osmBuildings.show = false;
 
-        if (osmBuildings) {
-            scene.primitives.remove(osmBuildings);
-        }
     }
 });
+
+// Style OSM Buildings based on Different Criteria
+
 
 // Air quality widget
 const airQualityWidget = document.getElementById('airQualityWidget');

@@ -90,6 +90,14 @@
       outline: none;
       margin-right: 10px;
     }
+
+    #waterLevelIframe {
+      position: absolute;
+      top: 50px;
+      right: 10px;
+      width: 730px;
+      height: 460px;
+    }
 </style>
 <body>
   <div id="cesiumContainer"></div>
@@ -130,6 +138,18 @@
       <option value="distance">Color By Distance To Selected Location</option>
     </select>
   </div>
+
+  <!-- iframe with interactive display of current hydrological time series -->
+  <iframe
+    id="waterLevelIframe"
+    title="Water Level Data from measuring points"
+    src="https://www.pegelonline.wsv.de/webservices/zeitreihe/visualisierung?pegeluuid=b6c6d5c8-e2d5-4469-8dd8-fa972ef7eaea&eingebettet=ja"
+    scrolling="no"
+    marginheight="0"
+    marginwidth="0"
+    frameborder="0"
+  >
+  </iframe>
 
   <script type="module" src="main.js"></script>
 

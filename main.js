@@ -355,6 +355,49 @@ showBuildingToggleButton.addEventListener('change', () => {
     buildingTileset.show = showBuildingToggleButton.checked;
 })
 
+const points = [
+    ["816affba-0118-4668-887f-fb882ed573b2", 9.88085916522793, 53.545442243928555],
+    ["d488c5cc-4de9-4631-8ce1-0db0e700b546", 9.969965378663103, 53.545442243928555],
+    ["fed4c295-7a01-463c-998e-70ebad8cd2cc", 10.061595155813295, 53.50839173311653],
+    ["706e5110-c5e2-4915-9989-c071fcb492ec", 9.991825587189057, 53.47272615248872],
+    ["ae1b91d0-e746-4f65-9f64-2d2e23603a82", 10.064017807378915, 53.46141377244459],
+    ["575da86f-d975-4837-b6f5-6f19c3a5e4b6", 9.677083802370527, 53.67819255188962],
+    ["d9acdbec-61ff-4308-978a-2f4d1c2c4059", 9.400981175517032, 53.82594576507704]
+];
+
+// Function to add water level monitoring stations to the map with icons
+const addWaterLevelStations = (points, viewer) => {
+    points.forEach(point => {
+        const id = point[0];
+        const longitude = point[1];
+        const latitude = point[2];
+
+        viewer.entities.add({
+            id: id,
+            position: Cesium.Cartesian3.fromDegrees(longitude, latitude, 30),
+            billboard: {
+                image: "assets/icons/sensor.png",
+                scale: 1,
+                // width: 32,
+                // height: 32,
+                verticalOrigin: Cesium.VerticalOrigin.BOTTOM,
+            },
+            label: {
+                text: `Water Level Station`,
+                font: '12px sans-serif',
+                style: Cesium.LabelStyle.FILL_AND_OUTLINE,
+                outlineWidth: 2,
+                verticalOrigin: Cesium.VerticalOrigin.BOTTOM,
+                pixelOffset: new Cesium.Cartesian2(0, -32),
+                showBackground: true,
+                backgroundColor: Cesium.Color.DARKBLUE.withAlpha(0.7),
+                backgroundPadding: new Cesium.Cartesian2(7, 5),
+            }
+        });
+    });
+};
+addWaterLevelStations(points, viewer);
+
 
 // Fetch data initially and then set up the interval
 fetchAirQuality(currentLat, currentLon);

@@ -259,7 +259,7 @@ const updateAirQualityWidget = (data) => {
         }
 
         sensorMarker = viewer.entities.add({
-            position: Cesium.Cartesian3.fromDegrees(lon, lat,60),
+            position: Cesium.Cartesian3.fromDegrees(lon, lat, 60),
             point: {
                 pixelSize: 20,
                 color: color,
@@ -353,6 +353,17 @@ highlightAreaToggleButton.addEventListener('change', () => {
 const showBuildingToggleButton = document.getElementById('proposedBuildingToggle');
 showBuildingToggleButton.addEventListener('change', () => {
     buildingTileset.show = showBuildingToggleButton.checked;
+})
+
+// Toggle button to show/hide water levels graph
+const waterLevelIframe = document.getElementById('waterLevelIframe');
+const showWaterLevelsToggleButton = document.getElementById('waterLevelToggle');
+showWaterLevelsToggleButton.addEventListener('change', () => {
+    if (showWaterLevelsToggleButton.checked) {
+        waterLevelIframe.removeAttribute("hidden")
+    } else {
+        waterLevelIframe.setAttribute("hidden", "hidden")
+    }
 })
 
 // uuids and coordinates of water level measuring stations

@@ -121,6 +121,7 @@
       <option value="3dtiles" selected>3D Tiles</option>
       <option value="terrain">Terrain</option>
     </select>
+
     <div id="highlightedAreaToggleContainer" class="toggleContainer">
         <input type="checkbox" id="targetHighlightToggle" checked>
         <label for="targetHighlightToggle">Show Target Area</label>
@@ -130,13 +131,19 @@
         <input type="checkbox" id="proposedBuildingToggle" checked>
         <label for="proposedBuildingToggle">Show proposed building</label>
     </div>
+
     <select id="osmStyleSelect" class="map-style-select">
-      <option value="">Highlight OSM builings</option>
+      <option value=""> -- Highlight OSM builings -- </option>
       <option value="residential">Highlight Residential Buildings</option>
       <option value="officeBuildings">Show Office Buildings Only</option>
       <option value="apartmentBuildings">Show Apartment Buildings Only</option>
       <option value="distance">Color By Distance To Selected Location</option>
     </select>
+    
+    <div id="waterLevelToggleContainer" class="toggleContainer">
+      <input type="checkbox" id="waterLevelToggle" checked>
+      <label for="waterLevelToggle">Water Level Graph</label>
+    </div>
   </div>
 
   <!-- iframe with interactive display of current hydrological time series -->

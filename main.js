@@ -259,7 +259,7 @@ const updateAirQualityWidget = (data) => {
         }
 
         sensorMarker = viewer.entities.add({
-            position: Cesium.Cartesian3.fromDegrees(lon, lat,50),
+            position: Cesium.Cartesian3.fromDegrees(lon, lat,60),
             point: {
                 pixelSize: 20,
                 color: color,
@@ -355,6 +355,7 @@ showBuildingToggleButton.addEventListener('change', () => {
     buildingTileset.show = showBuildingToggleButton.checked;
 })
 
+// uuids and coordinates of water level measuring stations
 const points = [
     ["816affba-0118-4668-887f-fb882ed573b2", 9.88085916522793, 53.545442243928555],
     ["d488c5cc-4de9-4631-8ce1-0db0e700b546", 9.969965378663103, 53.545442243928555],
@@ -374,12 +375,10 @@ const addWaterLevelStations = (points, viewer) => {
 
         viewer.entities.add({
             id: id,
-            position: Cesium.Cartesian3.fromDegrees(longitude, latitude, 30),
+            position: Cesium.Cartesian3.fromDegrees(longitude, latitude, 50),
             billboard: {
                 image: "assets/icons/sensor.png",
                 scale: 1,
-                // width: 32,
-                // height: 32,
                 verticalOrigin: Cesium.VerticalOrigin.BOTTOM,
             },
             label: {

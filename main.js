@@ -11,6 +11,18 @@ let DEFAULT_LONGITUDE = 9.9949553;
 let currentLat = DEFAULT_LATITUDE;
 let currentLon = DEFAULT_LONGITUDE;
 
+// Variables for flood modeling
+let floodLevel = 40;
+let floodMaterial;
+let floodEntity;
+
+const FIXED_FLOOD_BOUNDS = {
+    west: 9.968,   // Minimum longitude
+    east: 9.0,   // Maximum longitude
+    south: 53.264, // Minimum latitude
+    north: 53.966  // Maximum latitude
+};
+
 // Initialize the Cesium Viewer in the HTML element with the `cesiumContainer` ID.
 const viewer = new Cesium.Viewer('cesiumContainer', {
     sceneModePicker: false,
@@ -22,7 +34,7 @@ const scene = viewer.scene;
 //  Cesium World Terrain
 let worldTerrain;
 try {
-  worldTerrain = await Cesium.createWorldTerrainAsync();
+    worldTerrain = await Cesium.createWorldTerrainAsync();
 } catch (error) {
   console.log(`There was an error creating world terrain. ${error}`);
 }
@@ -204,7 +216,6 @@ const updateAirQualityWidget = (data) => {
         const { aqi, iaqi, city, time } = data.data;
         const [ lat, lon ] = city.geo;
         const color = getColorFromAQI(aqi);
-        const size = getSizeFromAQI(aqi);
 
         aqiElement.textContent = `AQI: ${aqi}`;
         
@@ -388,20 +399,27 @@ const addWaterLevelStations = (points, viewer) => {
 addWaterLevelStations(points, viewer);
 
 // Display flooding areas when floods are at 2.5
-Cesium.GeoJsonDataSource.load("data/Flooded_areas_2_5_clipped.geojson", {
-    clampToGround: true
-}).then((dataSource) => {
-    viewer.dataSources.add(dataSource);
-
-    const entities = dataSource.entities.values;
-    for (let entity of entities) {
-        if (entity.polygon) {
-            entity.polygon.material = new Cesium.Color(0.0, 0.5, 1.0, 0.5); // Semi-transparent blue
-            entity.polygon.extrudedHeight = undefined;
-        }
+function updateFloodMaterial() {
+    if (floodMaterial) {
+        scene.globe.material - undefined
     }
-    viewer.zoomTo(dataSource);
-});
+
+    floodMaterial = Cesium.createElevationBandMaterial({
+        scene: scene,
+        layers: [{
+            extendDownwards: true,
+            extendUpwards: false,
+            entries: [{
+                height: floodLevel,
+                color: Cesium.Color.BLUE.withAlpha(0.4)
+            }]
+        }]
+    })
+
+    scene.globe.material = floodMaterial
+}
+
+updateFloodMaterial();
 
 // Fetch data initially and then set up the interval
 fetchAirQuality(currentLat, currentLon);

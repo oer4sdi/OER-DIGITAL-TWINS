@@ -148,10 +148,6 @@ osmStyleSelect.addEventListener('change', () => {
 });
 
 
-
-// Air quality widget
-const airQualityWidget = document.getElementById('airQualityWidget');
-
 // Get individual elements for the air quality parameters
 const stationName = document.getElementById('stationName');
 const measurementTime = document.getElementById('measurementTime');
@@ -200,23 +196,6 @@ const getColorFromAQI = (aqi) => {
         return Cesium.Color.PURPLE;
     } else {
         return Cesium.Color.MAROON;
-    }
-};
-
-// Helper Function to determine size based on AQI
-const getSizeFromAQI = (aqi) => {
-    if (aqi <= 50) {
-        return 5;
-    } else if (aqi <= 100) {
-        return 7.5;
-    } else if (aqi <= 150) {
-        return 10;
-    } else if (aqi <= 200) {
-        return 12.5;
-    } else if (aqi <= 300) {
-        return 15;
-    } else {
-        return 20;
     }
 };
 
@@ -408,6 +387,21 @@ const addWaterLevelStations = (points, viewer) => {
 };
 addWaterLevelStations(points, viewer);
 
+// Display flooding areas when floods are at 2.5
+Cesium.GeoJsonDataSource.load("data/Flooded_areas_2_5_clipped.geojson", {
+    clampToGround: true
+}).then((dataSource) => {
+    viewer.dataSources.add(dataSource);
+
+    const entities = dataSource.entities.values;
+    for (let entity of entities) {
+        if (entity.polygon) {
+            entity.polygon.material = new Cesium.Color(0.0, 0.5, 1.0, 0.5); // Semi-transparent blue
+            entity.polygon.extrudedHeight = undefined;
+        }
+    }
+    viewer.zoomTo(dataSource);
+});
 
 // Fetch data initially and then set up the interval
 fetchAirQuality(currentLat, currentLon);

@@ -14,7 +14,6 @@ let currentLon = DEFAULT_LONGITUDE;
 // Variables for flood modeling
 let floodLevel = 40;
 let floodMaterial;
-let floodEntity;
 
 const FIXED_FLOOD_BOUNDS = {
     west: 9.968,   // Minimum longitude
@@ -134,9 +133,9 @@ function colorByDistanceToCoordinate(pickedLatitude, pickedLongitude) {
       },
       color: {
         conditions: [
-          ["${distance} > 0.014", "color('blue')"],
-          ["${distance} > 0.010", "color('green')"],
-          ["${distance} > 0.006", "color('yellow')"],
+          ["${distance} > 0.014", "color('green')"],
+          ["${distance} > 0.010", "color('blue')"],
+          ["${distance} > 0.006", "color('orange')"],
           ["${distance} > 0.0001", "color('red')"],
           ["true", "color('white')"],
         ],
@@ -398,7 +397,7 @@ const addWaterLevelStations = (points, viewer) => {
 };
 addWaterLevelStations(points, viewer);
 
-// Display flooding areas when floods are at 2.5
+// Display flooding areas when floods are at 2.5m
 function updateFloodMaterial() {
     if (floodMaterial) {
         scene.globe.material - undefined

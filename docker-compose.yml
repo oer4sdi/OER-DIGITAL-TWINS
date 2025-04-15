@@ -1,0 +1,11 @@
+version: '3.8'
+
+services:
+  cesium-app:
+    build: .
+    container_name: digital-twins-app
+    ports:
+      - "8080:80"
+    volumes:
+      - ./config.js:/usr/share/nginx/html/config.js
+    restart: unless-stopped

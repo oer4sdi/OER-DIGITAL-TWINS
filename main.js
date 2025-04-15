@@ -342,6 +342,15 @@ highlightAreaToggleButton.addEventListener('change', () => {
 const showBuildingToggleButton = document.getElementById('proposedBuildingToggle');
 showBuildingToggleButton.addEventListener('change', () => {
     buildingTileset.show = showBuildingToggleButton.checked;
+
+    if (showBuildingToggleButton.checked && buildingTileset !== undefined) {
+        const offset = new Cesium.HeadingPitchRange(
+            Cesium.Math.toRadians(0.0),
+            Cesium.Math.toRadians(-30.0),
+            200.0
+        )
+        viewer.zoomTo(buildingTileset, offset);
+    }
 })
 
 // Toggle button to show/hide water levels graph

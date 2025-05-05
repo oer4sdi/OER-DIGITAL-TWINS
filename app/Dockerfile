@@ -6,7 +6,6 @@ WORKDIR /usr/share/nginx/html
 COPY index.html .
 COPY main.js .
 COPY assets/ ./assets/
-COPY data/ ./data/
 
 # explose port 80
 EXPOSE 80

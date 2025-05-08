@@ -1,4 +1,4 @@
-import { CESIUM_ION_ACCESS_TOKEN, AIR_QUALITY_OPEN_DATA_PLATFORM_TOKEN } from './config.js';
+import { CESIUM_ION_ACCESS_TOKEN, AIR_QUALITY_OPEN_DATA_PLATFORM_TOKEN, PROPOSED_BUILDING_CESIUM_ION_ASSET_ID } from './config.js';
 
 // Access Token
 Cesium.Ion.defaultAccessToken = CESIUM_ION_ACCESS_TOKEN;
@@ -322,7 +322,7 @@ viewer.entities.add(targetHighlight);
 // Add tileset of proposed new building
 let buildingTileset;
 try {
-    buildingTileset = await Cesium.Cesium3DTileset.fromIonAssetId(3225663);
+    buildingTileset = await Cesium.Cesium3DTileset.fromIonAssetId(parseInt(PROPOSED_BUILDING_CESIUM_ION_ASSET_ID));
     viewer.scene.primitives.add(buildingTileset);
 } catch (error) {
     console.log(error);

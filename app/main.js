@@ -15,13 +15,6 @@ let currentLon = DEFAULT_LONGITUDE;
 let floodLevel = 40;
 let floodMaterial;
 
-const FIXED_FLOOD_BOUNDS = {
-    west: 9.968,   // Minimum longitude
-    east: 9.0,   // Maximum longitude
-    south: 53.264, // Minimum latitude
-    north: 53.966  // Maximum latitude
-};
-
 // Initialize the Cesium Viewer in the HTML element with the `cesiumContainer` ID.
 const viewer = new Cesium.Viewer('cesiumContainer', {
     sceneModePicker: false,
@@ -201,10 +194,8 @@ const getColorFromAQI = (aqi) => {
         return Cesium.Color.YELLOW;
     } else if (aqi <= 150) {
         return Cesium.Color.ORANGE;
-    } else if (aqi <= 200) {
-        return Cesium.Color.RED;
     } else if (aqi <= 300) {
-        return Cesium.Color.PURPLE;
+        return Cesium.Color.RED;
     } else {
         return Cesium.Color.MAROON;
     }
@@ -366,7 +357,7 @@ showWaterLevelsToggleButton.addEventListener('change', () => {
 })
 
 // uuids and coordinates of water level measuring stations
-const points = [
+const waterLevelMeasuringStationsPoints = [
     ["816affba-0118-4668-887f-fb882ed573b2", 9.88085916522793, 53.545442243928555],
     ["d488c5cc-4de9-4631-8ce1-0db0e700b546", 9.969965378663103, 53.545442243928555],
     ["fed4c295-7a01-463c-998e-70ebad8cd2cc", 10.061595155813295, 53.50839173311653],
@@ -377,8 +368,8 @@ const points = [
 ];
 
 // Function to add water level monitoring stations to the map with icons
-const addWaterLevelStations = (points, viewer) => {
-    points.forEach(point => {
+const addWaterLevelStations = (waterLevelMeasuringStationsPoints, viewer) => {
+    waterLevelMeasuringStationsPoints.forEach(point => {
         const id = point[0];
         const longitude = point[1];
         const latitude = point[2];
@@ -405,10 +396,25 @@ const addWaterLevelStations = (points, viewer) => {
         });
     });
 };
-addWaterLevelStations(points, viewer);
+addWaterLevelStations(waterLevelMeasuringStationsPoints, viewer);
 
-// Display flooding areas when floods are at 2.5m
-function updateFloodMaterial() {
+// fetch water level data from PegelOnline
+const fetchWaterLevelData = async () => {
+    const URL = 'https://www.pegelonline.wsv.de/webservices/rest-api/v2/stations/d488c5cc-4de9-4631-8ce1-0db0e700b546/W/currentmeasurement.json';
+    try {
+        const response = await fetch(URL);
+        const data = await response.json();
+
+        let waterLevel = (parseInt(data.value) / 100) + 36.9; // convert the geoid height to ellipsoidal height that is used by Cesium terrain.
+        updateFloodMaterial(waterLevel);
+
+    } catch (error) {
+        console.log(error.message)
+    }
+}
+
+// Display flooding areas
+function updateFloodMaterial(waterLevel) {
     if (floodMaterial) {
         scene.globe.material - undefined
     }
@@ -419,7 +425,7 @@ function updateFloodMaterial() {
             extendDownwards: true,
             extendUpwards: false,
             entries: [{
-                height: floodLevel,
+                height: waterLevel,
                 color: Cesium.Color.BLUE.withAlpha(0.4)
             }]
         }]
@@ -428,8 +434,8 @@ function updateFloodMaterial() {
     scene.globe.material = floodMaterial
 }
 
-updateFloodMaterial();
-
 // Fetch data initially and then set up the interval
 fetchAirQuality(currentLat, currentLon);
+fetchWaterLevelData();
 setInterval(() => fetchAirQuality(currentLat, currentLon), 300000);
+setInterval(() => fetchWaterLevelData(), 60000);

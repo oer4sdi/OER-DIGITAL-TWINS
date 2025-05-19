@@ -317,7 +317,6 @@ const targetHighlight = new Cesium.Entity({
         classificationType: Cesium.ClassificationType.CESIUM_3D_TILE
     },
 });
-viewer.entities.add(targetHighlight);
 
 // Add tileset of proposed new building
 let buildingTileset;
@@ -333,6 +332,7 @@ const highlightAreaToggleButton = document.getElementById('targetHighlightToggle
 highlightAreaToggleButton.addEventListener('change', () => {
     if (highlightAreaToggleButton.checked) {
         viewer.entities.add(targetHighlight);
+        viewer.zoomTo(targetHighlight);
     } else {
         viewer.entities.remove(targetHighlight);
     }
@@ -344,6 +344,7 @@ showBuildingToggleButton.addEventListener('change', () => {
     buildingTileset.show = showBuildingToggleButton.checked;
 
     if (showBuildingToggleButton.checked && buildingTileset !== undefined) {
+        
         const offset = new Cesium.HeadingPitchRange(
             Cesium.Math.toRadians(0.0),
             Cesium.Math.toRadians(-30.0),

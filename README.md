@@ -36,7 +36,7 @@ This tutorial is designed for students and professionals who want to improve the
 ### Authors and Funding
 This OER module has been developed at the Institute for Geoinformatics (IFGI), University of Münster, in collaboration with 52°North GmbH. Authors are James Ondieki, Simon Jirka and Albert Remke.
 
-The OER4SDI project has been recommended by the Digital University NRW and is funded by the Ministry of Culture and Science NRW.
+*** The OER4SDI project has been recommended by the Digital University NRW and is funded by the Ministry of Culture and Science NRW. ***
 
 ### Copyright and License Statement
 

@@ -1,5 +1,6 @@
 // config.sample.js - This is a template for the config.js file.
 // Rename this file to config.js and replace the placeholder values with your actual tokens.
+// The token values should be strings -> Enclose the values with ' '
 
 export const CESIUM_ION_ACCESS_TOKEN = 'YOUR_CESIUM_ION_ACCESS_TOKEN';
 export const AIR_QUALITY_OPEN_DATA_PLATFORM_TOKEN = 'YOUR_AIR_QUALITY_API_TOKEN';

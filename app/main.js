@@ -437,4 +437,4 @@ function updateFloodMaterial(waterLevel) {
 fetchAirQuality(currentLat, currentLon);
 fetchWaterLevelData();
 setInterval(() => fetchAirQuality(currentLat, currentLon), 300000);
-setInterval(() => fetchWaterLevelData(), 60000);
+setInterval(() => fetchWaterLevelData(), 300000);

@@ -12,7 +12,6 @@ let currentLat = DEFAULT_LATITUDE;
 let currentLon = DEFAULT_LONGITUDE;
 
 // Variables for flood modeling
-let floodLevel = 40;
 let floodMaterial;
 
 // Initialize the Cesium Viewer in the HTML element with the `cesiumContainer` ID.

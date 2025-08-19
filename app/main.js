@@ -12,7 +12,6 @@ let currentLat = DEFAULT_LATITUDE;
 let currentLon = DEFAULT_LONGITUDE;
 
 // Variables for flood modeling
-let floodLevel = 40;
 let floodMaterial;
 
 // Initialize the Cesium Viewer in the HTML element with the `cesiumContainer` ID.
@@ -438,4 +437,4 @@ function updateFloodMaterial(waterLevel) {
 fetchAirQuality(currentLat, currentLon);
 fetchWaterLevelData();
 setInterval(() => fetchAirQuality(currentLat, currentLon), 300000);
-setInterval(() => fetchWaterLevelData(), 60000);
+setInterval(() => fetchWaterLevelData(), 300000);

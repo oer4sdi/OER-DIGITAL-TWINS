@@ -98,6 +98,40 @@
       width: 730px;
       height: 460px;
     }
+
+.control-group {
+    margin-bottom: 5px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    background-color: rgba(0, 0, 0, 0.5);
+    padding: 3px;
+    border-radius: 5px;
+    color: white;
+    margin-right: 10px;
+    margin-left: 5px;
+}
+
+.control-group label {
+    cursor: pointer;
+    margin-left: 3px;
+    white-space: nowrap;
+}
+
+.slider {
+    width: 120px;
+    height: 4px;
+    background: rgba(255, 255, 255, 0.3);
+    outline: none;
+    border-radius: 2px;
+    -webkit-appearance: none;
+    appearance: none;
+}
+
+#waterLevelValue {
+    min-width: 30px;
+    color: #1380ee;
+}
 </style>
 <body>
   <div id="cesiumContainer"></div>
@@ -144,6 +178,13 @@
       <input type="checkbox" id="waterLevelToggle">
       <label for="waterLevelToggle">Water Level Graph</label>
     </div>
+
+    <div class="control-group">
+      <label for="waterLevelSlider">Floods Simulation (+m):</label>
+      <input type="range" id="waterLevelSlider" min="0" max="5" step="0.1" value="0" class="slider">
+      <span id="waterLevelValue">0.0m</span>
+    </div>
+
   </div>
 
   <!-- iframe with interactive display of current hydrological time series -->

@@ -13,6 +13,8 @@ let currentLon = DEFAULT_LONGITUDE;
 
 // Variables for flood modeling
 let floodMaterial;
+let baseWaterLevel = 0;
+let simulationOffset = 0;
 
 // Initialize the Cesium Viewer in the HTML element with the `cesiumContainer` ID.
 const viewer = new Cesium.Viewer('cesiumContainer', {
@@ -397,6 +399,19 @@ const addWaterLevelStations = (waterLevelMeasuringStationsPoints, viewer) => {
 };
 addWaterLevelStations(waterLevelMeasuringStationsPoints, viewer);
 
+// Floods simulation slider
+const waterLevelSlider = document.getElementById('waterLevelSlider')
+const waterLevelValue = document.getElementById('waterLevelValue')
+
+waterLevelSlider.addEventListener('input', (e) => {
+    simulationOffset = parseFloat(e.target.value)
+    waterLevelValue.textContent = `${simulationOffset.toFixed(1)}m`
+
+    // Update flood visualization with base water level + simulation value
+    const totalWaterLevel = baseWaterLevel + simulationOffset
+    updateFloodMaterial(totalWaterLevel)
+});
+
 // fetch water level data from PegelOnline
 const fetchWaterLevelData = async () => {
     const URL = 'https://www.pegelonline.wsv.de/webservices/rest-api/v2/stations/d488c5cc-4de9-4631-8ce1-0db0e700b546/W/currentmeasurement.json';
@@ -404,9 +419,11 @@ const fetchWaterLevelData = async () => {
         const response = await fetch(URL);
         const data = await response.json();
 
-        let waterLevel = (parseInt(data.value) / 100) + 36.9; // convert the geoid height to ellipsoidal height that is used by Cesium terrain.
-        updateFloodMaterial(waterLevel);
-
+        if (data && data.value) {
+            baseWaterLevel = (parseInt(data.value) / 100) + 36.9; // convert the geoid height to ellipsoidal height that is used by Cesium terrain.
+            const totalWaterLevel = baseWaterLevel + simulationOffset
+            updateFloodMaterial(totalWaterLevel);
+        }
     } catch (error) {
         console.log(error.message)
     }

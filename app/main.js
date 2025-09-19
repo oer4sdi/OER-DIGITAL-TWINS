@@ -312,11 +312,15 @@ const targetHighlight = new Cesium.Entity({
 
 // Add tileset of proposed new building
 let buildingTileset;
-try {
-    buildingTileset = await Cesium.Cesium3DTileset.fromIonAssetId(parseInt(PROPOSED_BUILDING_CESIUM_ION_ASSET_ID));
-    viewer.scene.primitives.add(buildingTileset);
-} catch (error) {
-    console.log(error);
+if (PROPOSED_BUILDING_CESIUM_ION_ASSET_ID && !isNaN(PROPOSED_BUILDING_CESIUM_ION_ASSET_ID)) {
+    try {
+        buildingTileset = await Cesium.Cesium3DTileset.fromIonAssetId(parseInt(PROPOSED_BUILDING_CESIUM_ION_ASSET_ID));
+        viewer.scene.primitives.add(buildingTileset);
+    } catch (error) {
+        console.log("Error loading proposed building tileset:", error);
+    }   
+} else {
+    console.log("No proposed building asset ID set yet. Skipping...")
 }
 
 // Toggle Button to show or hide highlighted area
